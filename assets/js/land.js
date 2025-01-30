@@ -10,16 +10,22 @@ const landApp = createApp({
                                 <tr v-for="action in airUnits" :key="action.type">
                                     <td v-for="country in axisCountries" :key="country + action.type">
                                         <div class="input-group input-group-sm">
-                                            <button class="btn btn-outline-secondary" style="width:30%;"
+                                            <button class="btn btn-outline-secondary" 
                                                     @click="adjustUnit(country, action.type, -1)">
                                                 -
                                             </button>
+                                            
                                             <input type="number" 
                                                    class="form-control text-center" 
                                                    v-model.number="axisForces[country][action.type]"
                                                    min="0"
                                                    readonly>
-                                            <button class="btn btn-outline-secondary" style="width:30%;"
+                                            <!--
+                                            <button class="btn btn-outline-secondary" disabled>
+                                            {{ axisForces[country][action.type] }}
+                                            </button>
+                                            -->
+                                            <button class="btn btn-outline-secondary"
                                                     @click="adjustUnit(country, action.type, 1)">
                                                 +
                                             </button>
@@ -30,7 +36,7 @@ const landApp = createApp({
                                     
                                     <td v-for="country in alliedCountries" :key="country + action.type">
                                         <div class="input-group input-group-sm">
-                                            <button class="btn btn-outline-secondary" style="width:30%;"
+                                            <button class="btn btn-outline-secondary"
                                                     @click="adjustUnit(country, action.type, -1)">
                                                 -
                                             </button>
@@ -39,7 +45,7 @@ const landApp = createApp({
                                                    v-model.number="alliedForces[country][action.type]"
                                                    min="0"
                                                    readonly>
-                                            <button class="btn btn-outline-secondary" style="width:30%;"
+                                            <button class="btn btn-outline-secondary"
                                                     @click="adjustUnit(country, action.type, 1)">
                                                 +
                                             </button>
@@ -47,23 +53,24 @@ const landApp = createApp({
                                     </td>
                                 </tr>
 
-                                <tr>
-                                    <th v-for="country in axisCountries" :key="'axis-' + country">
-                                        {{ country }}
-                                    </th>
+                                <tr class="country-list">
+                                    <th><img src="./assets/img/germany.png"></th>
+                                    <th><img src="./assets/img/japan.png"></th>
+                                    <th><img src="./assets/img/italy.png"></th>
                                     
                                     <th><span class="text-danger">Axis</span> vs <span class="text-primary">Allied</span></th>
                                     
-                                    <th v-for="country in alliedCountries" :key="'allied-' + country">
-                                        {{ country }}
-                                    </th>
+                                    <th><img src="./assets/img/uk.png"></th>
+                                    <th><img src="./assets/img/ussr.png"></th>
+                                    <th><img src="./assets/img/usa.png"></th>
+                                    <th><img src="./assets/img/china.png"></th>
                                 </tr>
 
                                 <tr v-for="action in surfaceUnits" :key="action.type">
 
                                     <td v-for="country in axisCountries" :key="country + action.type">
                                         <div class="input-group input-group-sm">
-                                            <button class="btn btn-outline-secondary" style="width:30%;"
+                                            <button class="btn btn-outline-secondary"
                                                     @click="adjustUnit(country, action.type, -1)">
                                                 -
                                             </button>
@@ -72,7 +79,7 @@ const landApp = createApp({
                                                    v-model.number="axisForces[country][action.type]"
                                                    min="0"
                                                    readonly>
-                                            <button class="btn btn-outline-secondary" style="width:30%;" 
+                                            <button class="btn btn-outline-secondary"
                                                     @click="adjustUnit(country, action.type, 1)">
                                                 +
                                             </button>
@@ -83,7 +90,7 @@ const landApp = createApp({
                                     
                                     <td v-for="country in alliedCountries" :key="country + action.type">
                                         <div class="input-group input-group-sm">
-                                            <button class="btn btn-outline-secondary" style="width:30%;"
+                                            <button class="btn btn-outline-secondary" 
                                                     @click="adjustUnit(country, action.type, -1)">
                                                 -
                                             </button>
@@ -92,7 +99,7 @@ const landApp = createApp({
                                                    v-model.number="alliedForces[country][action.type]"
                                                    min="0"
                                                    readonly>
-                                            <button class="btn btn-outline-secondary" style="width:30%;" 
+                                            <button class="btn btn-outline-secondary"  
                                                     @click="adjustUnit(country, action.type, 1)">
                                                 +
                                             </button>
@@ -110,7 +117,7 @@ const landApp = createApp({
 
 
             <!-- Power Preview -->
-            <div class="container mt-5">
+            <div class="container">
                 <div class="bar-container">
                     <div class="bar" :style="barStyle(axisAir, alliedAir)"></div>
                     <div class="label label-left">Axis Air Power: {{ axisAir }}</div>
@@ -172,7 +179,7 @@ const landApp = createApp({
                 <div class="col-12">
                     <div class="card shadow">
                         <div class="card-header bg-info text-white">
-                            <h4 class="mb-0">Battle Results</h4>
+                            <h4 class="mb-0">Simulation Summary</h4>
                         </div>
                         <div class="card-body flex-grow-1">
                             <div v-if="results">
@@ -225,6 +232,7 @@ const landApp = createApp({
                                         <h5>Average Casualties</h5>
                                         <div class="mb-2">
                                             <span class="text-danger">Axis: {{ results.axisAvgCasualties }}</span>
+                                            <br>
                                             <span class="text-primary">Allied: {{ results.alliedAvgCasualties }}</span><br>
                                             
                                         </div>
@@ -237,21 +245,39 @@ const landApp = createApp({
 
                                 <div class="row mb-4">
                                     <div class="text-center">
-                                        <h5>Random Run Sample</h5>
+                                        <h5>
+                                        Battle Sample #{{ selectedRun }}
+<span data-toggle="tooltip" title="Sample runs are ordered by luckiness. 
+Left-most: Best luck for the Axis
+Right-most: Best luck for the Allied">
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-question-circle" viewBox="0 0 16 16" >
+  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+  <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286m1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94"/>
+</svg>
+</span>
+                                        </h5>
+                                        <span class="text-danger h5">Axis luckiest  </span>
+                                        <input type="range" 
+                                               class="custom-range" 
+                                               v-model="selectedRun" 
+                                               :min="1" 
+                                               :max="simulationRuns" >
+                                        <span class="text-primary h5">  Allied luckiest</span>
+                                        <div class="table-responsive">
                                         <table class="table table-bordered align-middle">
                                             <tbody>
                                                 <tr>  
-                                                    <td><p class="text-danger">Bomber</p></td>
-                                                    <td><p class="text-success">Fighter</p></td>
-                                                    <td><p class="text-success">Armor</p></td>
-                                                    <td><p class="text-primary">Artillery</p></td>
-                                                    <td><p class="text-warning">Infantry</p></td>
-                                                    <td><span class="text-danger">Axis</span> / <span class="text-primary">Allied</span></td>
-                                                    <td><p class="text-warning">Infantry</p></td>
-                                                    <td><p class="text-primary">Artillery</p></td>
-                                                    <td><p class="text-success">Armor</p></td>
-                                                    <td><p class="text-success">Fighter</p></td>
-                                                    <td><p class="text-danger">Bomber</p></td>
+                                                    <td><span class="text-danger h6">Bomber</span></td>
+                                                    <td><span class="text-success h6">Fighter</span></td>
+                                                    <td><span class="text-success h6">Armor</span></td>
+                                                    <td><span class="text-primary h6">Artillery</span></td>
+                                                    <td><span class="text-warning h6">Infantry</span></td>
+                                                    <td><span class="text-danger h6">Axis</span> / <span class="text-primary h6">Allied</span></td>
+                                                    <td><span class="text-warning h6">Infantry</span></td>
+                                                    <td><span class="text-primary h6">Artillery</span></td>
+                                                    <td><span class="text-success h6">Armor</span></td>
+                                                    <td><span class="text-success h6">Fighter</span></td>
+                                                    <td><span class="text-danger h6">Bomber</span></td>
                                                 </tr>
                                                 <tr>
                                                     <td>{{ axisCommited['bomber'] }}</td>
@@ -259,7 +285,7 @@ const landApp = createApp({
                                                     <td>{{ axisCommited['armor'] }}</td>
                                                     <td>{{ axisCommited['artillery'] }}</td>
                                                     <td>{{ axisCommited['infantry'] }}</td>
-                                                    <td><b>Commited</b></td>
+                                                    <td><span class="h6">Commited</span></td>
                                                     <td>{{ alliedCommited['infantry'] }}</td>
                                                     <td>{{ alliedCommited['artillery'] }}</td>
                                                     <td>{{ alliedCommited['armor'] }}</td>
@@ -267,140 +293,68 @@ const landApp = createApp({
                                                     <td>{{ alliedCommited['bomber'] }}</td>                                       
                                                 </tr>
                                                 <tr>
-                                                    <td>{{ firstAxisStat['survived']['bomber'] }}</td>
-                                                    <td>{{ firstAxisStat['survived']['fighter'] }}</td>
-                                                    <td>{{ firstAxisStat['survived']['armor'] }}</td>
-                                                    <td>{{ firstAxisStat['survived']['artillery'] }}</td>
-                                                    <td>{{ firstAxisStat['survived']['infantry'] }}</td>
-                                                    <td><p class="text-success">Survived</p></td>
-                                                    <td>{{ firstAlliedStat['survived']['infantry'] }}</td>
-                                                    <td>{{ firstAlliedStat['survived']['artillery'] }}</td>
-                                                    <td>{{ firstAlliedStat['survived']['armor'] }}</td>
-                                                    <td>{{ firstAlliedStat['survived']['fighter'] }}</td>
-                                                    <td>{{ firstAlliedStat['survived']['bomber'] }}</td>
+                                                    <td>{{ selectedAxisStat['survived']['bomber'] }}</td>
+                                                    <td>{{ selectedAxisStat['survived']['fighter'] }}</td>
+                                                    <td>{{ selectedAxisStat['survived']['armor'] }}</td>
+                                                    <td>{{ selectedAxisStat['survived']['artillery'] }}</td>
+                                                    <td>{{ selectedAxisStat['survived']['infantry'] }}</td>
+                                                    <td><p class="text-success h6">Survived</p></td>
+                                                    <td>{{ selectedAlliedStat['survived']['infantry'] }}</td>
+                                                    <td>{{ selectedAlliedStat['survived']['artillery'] }}</td>
+                                                    <td>{{ selectedAlliedStat['survived']['armor'] }}</td>
+                                                    <td>{{ selectedAlliedStat['survived']['fighter'] }}</td>
+                                                    <td>{{ selectedAlliedStat['survived']['bomber'] }}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>{{ firstAxisStat['damaged']['bomber'] }}</td>
-                                                    <td>{{ firstAxisStat['damaged']['fighter'] }}</td>
-                                                    <td>{{ firstAxisStat['damaged']['armor'] }}</td>
-                                                    <td>{{ firstAxisStat['damaged']['artillery'] }}</td>
-                                                    <td>{{ firstAxisStat['damaged']['infantry'] }}</td>
-                                                    <td><p class="text-danger">Damaged</p></td>
-                                                    <td>{{ firstAlliedStat['damaged']['infantry'] }}</td>
-                                                    <td>{{ firstAlliedStat['damaged']['artillery'] }}</td>
-                                                    <td>{{ firstAlliedStat['damaged']['armor'] }}</td>
-                                                    <td>{{ firstAlliedStat['damaged']['fighter'] }}</td>
-                                                    <td>{{ firstAlliedStat['damaged']['bomber'] }}</td>
+                                                    <td>{{ selectedAxisStat['damaged']['bomber'] }}</td>
+                                                    <td>{{ selectedAxisStat['damaged']['fighter'] }}</td>
+                                                    <td>{{ selectedAxisStat['damaged']['armor'] }}</td>
+                                                    <td>{{ selectedAxisStat['damaged']['artillery'] }}</td>
+                                                    <td>{{ selectedAxisStat['damaged']['infantry'] }}</td>
+                                                    <td><p class="text-danger h6">Damaged</p></td>
+                                                    <td>{{ selectedAlliedStat['damaged']['infantry'] }}</td>
+                                                    <td>{{ selectedAlliedStat['damaged']['artillery'] }}</td>
+                                                    <td>{{ selectedAlliedStat['damaged']['armor'] }}</td>
+                                                    <td>{{ selectedAlliedStat['damaged']['fighter'] }}</td>
+                                                    <td>{{ selectedAlliedStat['damaged']['bomber'] }}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>{{ firstAxisStat['destroyed']['bomber'] }}</td>
-                                                    <td>{{ firstAxisStat['destroyed']['fighter'] }}</td>
-                                                    <td>{{ firstAxisStat['destroyed']['armor'] }}</td>
-                                                    <td>{{ firstAxisStat['destroyed']['artillery'] }}</td>
-                                                    <td>{{ firstAxisStat['destroyed']['infantry'] }}</td>
-                                                    <td><p class="text-muted">Destroyed</p></td>
-                                                    <td>{{ firstAlliedStat['destroyed']['infantry'] }}</td>
-                                                    <td>{{ firstAlliedStat['destroyed']['artillery'] }}</td>
-                                                    <td>{{ firstAlliedStat['destroyed']['armor'] }}</td>
-                                                    <td>{{ firstAlliedStat['destroyed']['fighter'] }}</td>
-                                                    <td>{{ firstAlliedStat['destroyed']['bomber'] }}</td>
+                                                    <td>{{ selectedAxisStat['destroyed']['bomber'] }}</td>
+                                                    <td>{{ selectedAxisStat['destroyed']['fighter'] }}</td>
+                                                    <td>{{ selectedAxisStat['destroyed']['armor'] }}</td>
+                                                    <td>{{ selectedAxisStat['destroyed']['artillery'] }}</td>
+                                                    <td>{{ selectedAxisStat['destroyed']['infantry'] }}</td>
+                                                    <td><p class="text-muted h6">Destroyed</p></td>
+                                                    <td>{{ selectedAlliedStat['destroyed']['infantry'] }}</td>
+                                                    <td>{{ selectedAlliedStat['destroyed']['artillery'] }}</td>
+                                                    <td>{{ selectedAlliedStat['destroyed']['armor'] }}</td>
+                                                    <td>{{ selectedAlliedStat['destroyed']['fighter'] }}</td>
+                                                    <td>{{ selectedAlliedStat['destroyed']['bomber'] }}</td>
                                                 </tr>
                                             </tbody>
                                         </table>
+                                        </div>
                                         <div class="bar-container">
-                                            <div class="bar" :style="barStyle(firstAxisStat['casualties'], firstAlliedStat['casualties'])"></div>
-                                            <div class="label label-left">Axis Casualties: {{ firstAxisStat['casualties'] }}</div>
-                                            <div class="label label-right">{{ firstAlliedStat['casualties'] }} :Allied Casualties</div>
+                                            <div class="bar" :style="barStyle(selectedAxisStat['casualties'], selectedAlliedStat['casualties'])"></div>
+                                            <div class="label label-left">Axis Casualties: {{ selectedAxisStat['casualties'] }}</div>
+                                            <div class="label label-right">{{ selectedAlliedStat['casualties'] }} :Allied Casualties</div>
                                         </div>
                                     </div>
                                 </div>
-                                
-                                <div class="row mb-4">
-                                    <div class="text-center">
-                                        <h5>Median Run Sample</h5>
-                                        <table class="table table-bordered align-middle">
-                                            <tbody>
-                                                <tr>  
-                                                    <td><p class="text-danger">Bomber</p></td>
-                                                    <td><p class="text-success">Fighter</p></td>
-                                                    <td><p class="text-success">Armor</p></td>
-                                                    <td><p class="text-primary">Artillery</p></td>
-                                                    <td><p class="text-warning">Infantry</p></td>
-                                                    <td><span class="text-danger">Axis</span> / <span class="text-primary">Allied</span></td>
-                                                    <td><p class="text-warning">Infantry</p></td>
-                                                    <td><p class="text-primary">Artillery</p></td>
-                                                    <td><p class="text-success">Armor</p></td>
-                                                    <td><p class="text-success">Fighter</p></td>
-                                                    <td><p class="text-danger">Bomber</p></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>{{ axisCommited['bomber'] }}</td>
-                                                    <td>{{ axisCommited['fighter'] }}</td>
-                                                    <td>{{ axisCommited['armor'] }}</td>
-                                                    <td>{{ axisCommited['artillery'] }}</td>
-                                                    <td>{{ axisCommited['infantry'] }}</td>
-                                                    <td><b>Commited</b></td>
-                                                    <td>{{ alliedCommited['infantry'] }}</td>
-                                                    <td>{{ alliedCommited['artillery'] }}</td>
-                                                    <td>{{ alliedCommited['armor'] }}</td>
-                                                    <td>{{ alliedCommited['fighter'] }}</td>
-                                                    <td>{{ alliedCommited['bomber'] }}</td>                                       
-                                                </tr>
-                                                <tr>
-                                                    <td>{{ medianAxisStat['survived']['bomber'] }}</td>
-                                                    <td>{{ medianAxisStat['survived']['fighter'] }}</td>
-                                                    <td>{{ medianAxisStat['survived']['armor'] }}</td>
-                                                    <td>{{ medianAxisStat['survived']['artillery'] }}</td>
-                                                    <td>{{ medianAxisStat['survived']['infantry'] }}</td>
-                                                    <td><p class="text-success">Survived</p></td>
-                                                    <td>{{ medianAlliedStat['survived']['infantry'] }}</td>
-                                                    <td>{{ medianAlliedStat['survived']['artillery'] }}</td>
-                                                    <td>{{ medianAlliedStat['survived']['armor'] }}</td>
-                                                    <td>{{ medianAlliedStat['survived']['fighter'] }}</td>
-                                                    <td>{{ medianAlliedStat['survived']['bomber'] }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>{{ medianAxisStat['damaged']['bomber'] }}</td>
-                                                    <td>{{ medianAxisStat['damaged']['fighter'] }}</td>
-                                                    <td>{{ medianAxisStat['damaged']['armor'] }}</td>
-                                                    <td>{{ medianAxisStat['damaged']['artillery'] }}</td>
-                                                    <td>{{ medianAxisStat['damaged']['infantry'] }}</td>
-                                                    <td><p class="text-danger">Damaged</p></td>
-                                                    <td>{{ medianAlliedStat['damaged']['infantry'] }}</td>
-                                                    <td>{{ medianAlliedStat['damaged']['artillery'] }}</td>
-                                                    <td>{{ medianAlliedStat['damaged']['armor'] }}</td>
-                                                    <td>{{ medianAlliedStat['damaged']['fighter'] }}</td>
-                                                    <td>{{ medianAlliedStat['damaged']['bomber'] }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>{{ medianAxisStat['destroyed']['bomber'] }}</td>
-                                                    <td>{{ medianAxisStat['destroyed']['fighter'] }}</td>
-                                                    <td>{{ medianAxisStat['destroyed']['armor'] }}</td>
-                                                    <td>{{ medianAxisStat['destroyed']['artillery'] }}</td>
-                                                    <td>{{ medianAxisStat['destroyed']['infantry'] }}</td>
-                                                    <td><p class="text-muted">Destroyed</p></td>
-                                                    <td>{{ medianAlliedStat['destroyed']['infantry'] }}</td>
-                                                    <td>{{ medianAlliedStat['destroyed']['artillery'] }}</td>
-                                                    <td>{{ medianAlliedStat['destroyed']['armor'] }}</td>
-                                                    <td>{{ medianAlliedStat['destroyed']['fighter'] }}</td>
-                                                    <td>{{ medianAlliedStat['destroyed']['bomber'] }}</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <div class="bar-container">
-                                            <div class="bar" :style="barStyle(medianAxisStat['casualties'], medianAlliedStat['casualties'])"></div>
-                                            <div class="label label-left">Axis Casualties: {{ medianAxisStat['casualties'] }}</div>
-                                            <div class="label label-right">{{ medianAlliedStat['casualties'] }} :Allied Casualties</div>
-                                        </div>
-                                    </div>
-                                </div>
+
                             </div>
-                            
+                          
                             <!-- Empty State -->
                             <div v-else class="text-center text-muted py-4">
                                 <i class="bi bi-clipboard-data display-6"></i>
                                 <p class="mt-2">No simulation data available<br>
                                 <small>Configure forces and run simulation</small></p>
+                            </div>
+                            
+                            <!-- Causlties Distribution -->
+                            <div v-show="results" class="row mb-4">
+                                <div class="text-center h5">Casualties Distribution</div>
+                                <canvas id="casualties-dist" width="400" height="200"></canvas>
                             </div>
                         </div>
                     </div>
@@ -434,13 +388,16 @@ const landApp = createApp({
             simulationRuns: 1000,
             currentRun: 0,
             isSimulating: false,
-            
+            axisRemainSurfacePower: 0, // update the surface power after air battle (some air unit might be destroyed)
+            alliedRemainSurfacePower: 0,
             // Result 
             alliedCommited: {},
             axisCommited: {},
             alliedStats: [],
             axisStats: [],
             results: null,
+            selectedRun: 1,
+            chart: null,
             
             
             
@@ -460,18 +417,11 @@ const landApp = createApp({
             return this.computeSurface(this.axisForces);
         },
 
-        firstAlliedStat(){
-            return this.alliedStats[Math.floor(Math.random() * this.alliedStats.length)];
+        selectedAlliedStat(){
+            return this.alliedStats[this.selectedRun];
         },
-        firstAxisStat(){
-            return this.axisStats[Math.floor(Math.random() * this.axisStats.length)];
-        },
-        medianAlliedStat(){
-            return this.alliedStats[Math.floor(this.alliedStats.length / 2)];
-        },
-        medianAxisStat(){
-            console.log(Math.floor(this.axisStats.length / 2))
-            return this.axisStats[Math.floor(this.axisStats.length / 2)];
+        selectedAxisStat(){
+            return this.axisStats[this.selectedRun];
         },
         progressPercentage(){
             return (this.currentRun / this.simulationRuns) * 100;
@@ -670,6 +620,7 @@ const landApp = createApp({
                     alliedStat['survived']['bomber'] += result[country]['bomber_strategic'] + result[country]['bomber_air_ground'];
                     alliedStat['survived']['fighter'] += result[country]['fighter_air'] + result[country]['fighter_ground'];
                 }
+                this.alliedRemainSurfacePower = this.computeSurface(result);
 
                 result = this.battle('air', 'allied');
                 axisStat['damaged']['bomber'] = result['damaged']['bomber_strategic'] + result['damaged']['bomber_air_ground'];
@@ -679,6 +630,10 @@ const landApp = createApp({
                     axisStat['survived']['bomber'] += result[country]['bomber_strategic'] + result[country]['bomber_air_ground'];
                     axisStat['survived']['fighter'] += result[country]['fighter_air'] + result[country]['fighter_ground'];
                 }
+                this.axisRemainSurfacePower = this.computeSurface(result);
+               
+                
+                
                 
                 // Surface Battles
                 var result = this.battle('surface', 'axis');
@@ -741,14 +696,26 @@ const landApp = createApp({
             }
             
             // Sort the stat by casualties
-            this.alliedStats.sort((a, b) => a.casualties - b.casualties);
-            this.axisStats.sort((a, b) => a.casualties - b.casualties);
+            
+            var casualtiesDiff = [];
+            for (let i = 0; i < this.simulationRuns; i++){
+                var temp = {};
+                temp['idx'] = i;
+                temp['val'] = this.axisStats[i]['casualties'] - this.alliedStats[i]['casualties'];
+                casualtiesDiff.push(temp);
+            }
+            casualtiesDiff.sort((a, b) => a.val - b.val);
+            var sortedAlliedStats = [];
+            var sortedAxisStats = [];
+            for (let i = 0; i < this.simulationRuns; i++){
+                sortedAlliedStats.push(this.alliedStats[casualtiesDiff[i]['idx']]);
+                sortedAxisStats.push(this.axisStats[casualtiesDiff[i]['idx']]);
+            }
+            this.alliedStats = sortedAlliedStats;
+            this.axisStats = sortedAxisStats;
             
             this.results = {};
-            this.results['axisElimAllAir'] = 30;
-            this.results['axisElimAllSurface'] = 40;
-            this.results['alliedElimAllAir'] = 60;
-            this.results['alliedElimAllSurface'] = 40;
+
             
             
             this.results['axisAvgCasualties'] = (this.axisStats.reduce((accumulator, current) => {
@@ -771,20 +738,16 @@ const landApp = createApp({
               return accumulator + Number(current.elimAllSurface);
             }, 0) / this.simulationRuns * 100).toFixed(2);
             
-            /*
-            setTimeout(() => {
-                this.results = {
-                    alliedWinRate: 55.2,
-                    axisWinRate: 44.8,
-                    avgAlliedLosses: '24,500',
-                    avgAxisLosses: '31,200'
-                };
-                this.isSimulating = false;
-            }, 0);
-            */
+            // default sample run set to median
+            this.selectedRun = Math.floor(this.simulationRuns / 2);
             // reset simulation
             this.isSimulating = false;
             this.currentRun = 0;
+            
+            // plot graph
+            this.renderChart();
+            
+           
         },
         /* Output: casualties of the defending side */
         battle(type, attacker){
@@ -795,9 +758,9 @@ const landApp = createApp({
             } else if (type == 'air' && attacker == 'axis'){
                 power = this.axisAir;
             } else if (type == 'surface' && attacker == 'allied'){
-                power = this.alliedSurface;
+                power = this.alliedRemainSurfacePower;
             } else if (type == 'surface' && attacker == 'axis'){
-                power = this.axisSurface;
+                power = this.axisRemainSurfacePower;
             }
             var defenders = {};
             var damaged = {
@@ -830,22 +793,22 @@ const landApp = createApp({
                     var green = colors['green'];
                     while (green > 0){
                         green -= 1;
-                        if (damaged['fighter_air'] > 0){
-                            damaged['fighter_air'] -= 1;
-                            continue;
-                        }
                         if (damaged['fighter_ground'] > 0){
                             damaged['fighter_ground'] -= 1;
                             continue;
                         }
+                        if (damaged['fighter_air'] > 0){
+                            damaged['fighter_air'] -= 1;
+                            continue;
+                        }
                         for (const country in defenders){
-                            if (defenders[country]['fighter_air'] > 0){
-                                defenders[country]['fighter_air'] -= 1;
-                                damaged['fighter_air'] += 1;
-                                break;
-                            } else if (defenders[country]['fighter_ground'] > 0){
+                            if (defenders[country]['fighter_ground'] > 0){
                                 defenders[country]['fighter_ground'] -= 1;
                                 damaged['fighter_ground'] += 1;
+                                break;
+                            } else if (defenders[country]['fighter_air'] > 0){
+                                defenders[country]['fighter_air'] -= 1;
+                                damaged['fighter_air'] += 1;
                                 break;
                             }
                         }
@@ -855,84 +818,84 @@ const landApp = createApp({
                     var red = colors['red'];
                     while (red > 0){
                         red -= 1;
-                        if (damaged['bomber_strategic'] > 0){
-                            damaged['bomber_strategic'] -= 1;
-                            continue;
-                        }
                         if (damaged['bomber_air_ground'] > 0){
                             damaged['bomber_air_ground'] -= 1;
                             continue;
                         }
+                        if (damaged['bomber_strategic'] > 0){
+                            damaged['bomber_strategic'] -= 1;
+                            continue;
+                        }
                         for (const country in defenders){
-                            if (defenders[country]['bomber_strategic'] > 0){
-                                defenders[country]['bomber_strategic'] -= 1;
-                                damaged['bomber_strategic'] += 1;
-                                break;
-                            } else if (defenders[country]['bomber_air_ground'] > 0){
+                            if (defenders[country]['bomber_air_ground'] > 0){
                                 defenders[country]['bomber_air_ground'] -= 1;
                                 damaged['bomber_air_ground'] += 1;
                                 break;
-                            }
+                            } else if (defenders[country]['bomber_strategic'] > 0){
+                                defenders[country]['bomber_strategic'] -= 1;
+                                damaged['bomber_strategic'] += 1;
+                                break;
+                            } 
                         }
                     } 
                     // resolve black
                     var black = colors['black'];
                     while (black > 0){
                         black -= 1;
-                        if (damaged['bomber_strategic'] > 0){
-                            damaged['bomber_strategic'] -= 1;
-                            continue;
-                        }
                         if (damaged['bomber_air_ground'] > 0){
                             damaged['bomber_air_ground'] -= 1;
                             continue;
                         }
-                        if (damaged['fighter_air'] > 0){
-                            damaged['fighter_air'] -= 1;
+                        if (damaged['bomber_strategic'] > 0){
+                            damaged['bomber_strategic'] -= 1;
                             continue;
                         }
                         if (damaged['fighter_ground'] > 0){
                             damaged['fighter_ground'] -= 1;
                             continue;
                         }
+                        if (damaged['fighter_air'] > 0){
+                            damaged['fighter_air'] -= 1;
+                            continue;
+                        }
                         for (const country in defenders){
-                            if (defenders[country]['bomber_strategic'] > 0){
-                                defenders[country]['bomber_strategic'] -= 1;
-                                damaged['bomber_strategic'] += 1;
-                                break;
-                            } else if (defenders[country]['bomber_air_ground'] > 0){
+                            if (defenders[country]['bomber_air_ground'] > 0){
                                 defenders[country]['bomber_air_ground'] -= 1;
                                 damaged['bomber_air_ground'] += 1;
                                 break;
-                            } else if (defenders[country]['fighter_air'] > 0){
-                                defenders[country]['fighter_air'] -= 1;
-                                damaged['fighter_air'] += 1;
+                            } else if (defenders[country]['bomber_strategic'] > 0){
+                                defenders[country]['bomber_strategic'] -= 1;
+                                damaged['bomber_strategic'] += 1;
                                 break;
                             } else if (defenders[country]['fighter_ground'] > 0){
                                 defenders[country]['fighter_ground'] -= 1;
                                 damaged['fighter_ground'] += 1;
                                 break;
-                            }
+                            } else if (defenders[country]['fighter_air'] > 0){
+                                defenders[country]['fighter_air'] -= 1;
+                                damaged['fighter_air'] += 1;
+                                break;
+                            } 
                         }
                     }
                     // resolve white
                     var white = colors['white'];
                     while (white > 0){
                         white -= 1;
+                        if (damaged['bomber_air_ground'] > 0){
+                            damaged['bomber_air_ground'] -= 1;
+                            continue;
+                        } 
                         if (damaged['bomber_strategic'] > 0){
                             damaged['bomber_strategic'] -= 1;
                             continue;
                         }
-                        if (damaged['bomber_air_ground'] > 0){
-                            damaged['bomber_air_ground'] -= 1;
+                        if (damaged['fighter_ground'] > 0){
+                            damaged['fighter_ground'] -= 1;
                             continue;
                         }
                         if (damaged['fighter_air'] > 0){
                             damaged['fighter_air'] -= 1;
-                            continue;
-                        }
-                        if (damaged['fighter_ground'] > 0){
-                            damaged['fighter_ground'] -= 1;
                             continue;
                         }
                     }
@@ -1042,14 +1005,16 @@ const landApp = createApp({
                     var black = colors['black'];
                     while (black > 0){
                         black -= 1;
-                        // 1. damaged green -> blue -> yellow
+                        // 1. damaged green
                         if (damaged['armor_defensive'] > 0){
                             damaged['armor_defensive'] -= 1;
                             continue;
                         } else if (damaged['armor_offensive'] > 0){
                             damaged['armor_offensive'] -= 1;
                             continue;
-                        } else if (damaged['artillery_antiair'] > 0){
+                        }
+                        /*
+                        else if (damaged['artillery_antiair'] > 0){
                             damaged['artillery_antiair'] -= 1;
                             continue;
                         } else if (damaged['artillery_ground'] > 0){
@@ -1059,7 +1024,8 @@ const landApp = createApp({
                             damaged['infantry_defensive'] -= 1;
                             continue;
                         } 
-                        // 2. undamaged 2hp green -> offensive green without defensive
+                        */
+                        // 2. 2hp green
                         if (twoHpArmor > 0){
                             twoHpArmor -= 1;
                             damaged['armor_defensive'] += 1;
@@ -1074,8 +1040,16 @@ const landApp = createApp({
                             }
                         } 
                         if (found) { continue; }
-                        
-                        // 3. 3hp green -> blue
+                        // 3. damaged blue
+                        if (damaged['artillery_antiair'] > 0){
+                            damaged['artillery_antiair'] -= 1;
+                            continue;
+                        } else if (damaged['artillery_ground'] > 0){
+                            damaged['artillery_ground'] -= 1;
+                            continue;
+                        }
+              
+                        // 4. 3hp green -> blue
                         for (const country in defenders){
                             if (defenders[country]['armor_defensive'] > 0){
                                 defenders[country]['armor_defensive'] -= 1;
@@ -1095,7 +1069,7 @@ const landApp = createApp({
                             }
                         }
                         if (found) { continue; }
-                        // 4. offensive infantry without defensive
+                        // 4. 1hp yellow offensive infantry without defensive
                         for (const country in defenders){
                             if (defenders[country]['infantry_offensive'] > 0 && defenders[country]['infantry_defensive'] == 0){
                                 defenders[country]['infantry_offensive'] -= 1;
@@ -1103,7 +1077,12 @@ const landApp = createApp({
                                 break;
                             }
                         }
+                        
                         if (found) { continue; }
+                        if (damaged['infantry_defensive'] > 0){
+                            damaged['infantry_defensive'] -= 1;
+                            continue;
+                        } 
                         // 5. defensive infantry
                         for (const country in defenders){
                             if (defenders[country]['infantry_defensive'] > 1){
@@ -1179,9 +1158,54 @@ const landApp = createApp({
 
             return result;
         },
-        countCasualties(before, after){
-            var count = 0;
-            
+
+        renderChart() {
+            const ctx = document.getElementById('casualties-dist').getContext('2d');
+            if (this.chart) {
+                this.chart.destroy();
+            }
+            this.chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: Array.from({ length: this.simulationRuns }, (_, i) => `#${i + 1}`),
+                    datasets: [
+                        {
+                            label: 'Axis',
+                            data: this.axisStats.map(obj => obj.casualties),
+                            borderColor: 'rgb(244, 67, 54)',
+                            fill: false,
+                        },
+                        {
+                            label: 'Allied',
+                            data: this.alliedStats.map(obj => obj.casualties),
+                            borderColor: 'rgb(33, 150, 243)',
+                            fill: false,
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Run number' 
+                            },
+                            ticks: {
+                                autoSkip: true,
+                                maxTicksLimit: 10 // Limit number of ticks on x-axis
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Casualties' 
+                            },
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
         }
     }
 });
