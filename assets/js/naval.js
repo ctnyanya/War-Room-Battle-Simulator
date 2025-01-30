@@ -60,11 +60,19 @@ const navalApp = createApp({
                                     
                                     <th>
                                     <span class="text-danger">Axis</span> vs <span class="text-primary">Allied</span>
-                                    <div>
+                                    <div v-if="countSurfaceType(axisForces) > countSurfaceType(alliedForces)" class="">
+                                    <-FORCE ADVANTAGE
+                                    </div>
+                                    <div v-else-if="countSurfaceType(axisForces) < countSurfaceType(alliedForces)" class="h6">
+                                    FORCE ADVANTAGE->
+                                    </div>
+                                    <div class="port-adv">
                                     <input class="form-check-input" type="checkbox" value="" v-model="axisPortAdvantage">
                                     Port Advantage
                                     <input class="form-check-input" type="checkbox" value="" v-model="alliedPortAdvantage">
                                     </div>
+
+                                    
                                     </th>
                                     
                                     <th><img src="./assets/img/uk.png"></th>
@@ -128,13 +136,13 @@ const navalApp = createApp({
             <div class="container">
                 <div class="bar-container">
                     <div class="bar" :style="barStyle(axisAir, alliedAir)"></div>
-                    <div class="label label-left">Axis Air Power: {{ axisAir }}</div>
-                    <div class="label label-right">{{ alliedAir }} :Allied Air Power</div>
+                    <div class="label label-left">Air Power: {{ axisAir }}</div>
+                    <div class="label label-right">{{ alliedAir }} :Air Power</div>
                 </div>
                 <div class="bar-container">
                     <div class="bar" :style="barStyle(axisSurface, alliedSurface)"></div>
-                    <div class="label label-left">Axis Surface Power: {{ axisSurface }} <span v-if="countSurfaceType(axisForces) > countSurfaceType(alliedForces)">(FORCE ADVANTAGE!)</span></div>
-                    <div class="label label-right"><span v-if="countSurfaceType(axisForces) < countSurfaceType(alliedForces)">(FORCE ADVANTAGE!)</span> {{ alliedSurface }} :Allied Surface Power</div>
+                    <div class="label label-left">Surface Power: {{ axisSurface }}</div>
+                    <div class="label label-right">{{ alliedSurface }} :Surface Power</div>
                 </div>
             </div>
 
@@ -264,13 +272,13 @@ Right-most: Best luck for the Allied">
 </svg>
 </span>
                                         </h5>
-                                        <span class="text-danger h5">Axis luckiest  </span>
+                                        <span class="text-danger h5"><- Axis luckiest  </span>
                                         <input type="range" 
                                                class="custom-range" 
                                                v-model="selectedRun" 
                                                :min="1" 
                                                :max="simulationRuns" >
-                                        <span class="text-primary h5">  Allied luckiest</span>
+                                        <span class="text-primary h5">  Allied luckiest -></span>
                                         <div class="table-responsive">
                                         <table class="table table-bordered align-middle">
                                             <tbody>
@@ -364,23 +372,29 @@ Right-most: Best luck for the Allied">
                                                     <td colspan="5">
                                                         <div v-if="selectedAxisStat['airDice'][0]" class="h6 text-start">
                                                             First batch:
+                                                            <div class="dice">
                                                             <div v-for="(count, color) in selectedAxisStat['airDice'][0]" :key="color" class="color-count">
                                                                 <div :style="{ backgroundColor: color }" class="color-box"></div>
                                                                 {{ count }}
                                                             </div>
+                                                            </div>
                                                         </div>
                                                         <div v-if="selectedAxisStat['airDice'][1]" class="h6 text-start">
                                                             Second batch:
+                                                            <div class="dice">
                                                             <div v-for="(count, color) in selectedAxisStat['airDice'][1]" :key="color" class="color-count">
                                                                 <div :style="{ backgroundColor: color }" class="color-box"></div>
                                                                 {{ count }}
                                                             </div>
+                                                            </div>
                                                         </div>
                                                         <div v-if="selectedAxisStat['airDice'][2]" class="h6 text-start">
                                                             Third batch:
+                                                            <div class="dice">
                                                             <div v-for="(count, color) in selectedAxisStat['airDice'][2]" :key="color" class="color-count">
                                                                 <div :style="{ backgroundColor: color }" class="color-box"></div>
                                                                 {{ count }}
+                                                            </div>
                                                             </div>
                                                         </div>
                                                     </td>
@@ -388,23 +402,29 @@ Right-most: Best luck for the Allied">
                                                     <td colspan="5">
                                                         <div v-if="selectedAlliedStat['airDice'][0]" class="h6 text-start">
                                                             First batch:
+                                                            <div class="dice">
                                                             <div v-for="(count, color) in selectedAlliedStat['airDice'][0]" :key="color" class="color-count">
                                                                 <div :style="{ backgroundColor: color }" class="color-box"></div>
                                                                 {{ count }}
                                                             </div>
+                                                            </div>
                                                         </div>
                                                         <div v-if="selectedAlliedStat['airDice'][1]" class="h6 text-start">
                                                             Second batch:
+                                                            <div class="dice">
                                                             <div v-for="(count, color) in selectedAlliedStat['airDice'][1]" :key="color" class="color-count">
                                                                 <div :style="{ backgroundColor: color }" class="color-box"></div>
                                                                 {{ count }}
                                                             </div>
+                                                            </div>
                                                         </div>
                                                         <div v-if="selectedAlliedStat['airDice'][2]" class="h6 text-start">
                                                             Third batch:
+                                                            <div class="dice">
                                                             <div v-for="(count, color) in selectedAlliedStat['airDice'][2]" :key="color" class="color-count">
                                                                 <div :style="{ backgroundColor: color }" class="color-box"></div>
                                                                 {{ count }}
+                                                            </div>
                                                             </div>
                                                         </div>
                                                     </td>
@@ -413,23 +433,29 @@ Right-most: Best luck for the Allied">
                                                     <td colspan="5">
                                                         <div v-if="selectedAxisStat['surfaceDice'][0]" class="h6 text-start">
                                                             First batch:
+                                                            <div class="dice">
                                                             <div v-for="(count, color) in selectedAxisStat['surfaceDice'][0]" :key="color" class="color-count">
                                                                 <div :style="{ backgroundColor: color }" class="color-box"></div>
                                                                 {{ count }}
                                                             </div>
+                                                            </div>
                                                         </div>
                                                         <div v-if="selectedAxisStat['surfaceDice'][1]" class="h6 text-start">
                                                             Second batch:
+                                                            <div class="dice">
                                                             <div v-for="(count, color) in selectedAxisStat['surfaceDice'][1]" :key="color" class="color-count">
                                                                 <div :style="{ backgroundColor: color }" class="color-box"></div>
                                                                 {{ count }}
                                                             </div>
+                                                            </div>
                                                         </div>
                                                         <div v-if="selectedAxisStat['surfaceDice'][2]" class="h6 text-start">
                                                             Third batch:
+                                                            <div class="dice">
                                                             <div v-for="(count, color) in selectedAxisStat['surfaceDice'][2]" :key="color" class="color-count">
                                                                 <div :style="{ backgroundColor: color }" class="color-box"></div>
                                                                 {{ count }}
+                                                            </div>
                                                             </div>
                                                         </div>
                                                     </td>
@@ -437,23 +463,29 @@ Right-most: Best luck for the Allied">
                                                     <td colspan="5">
                                                         <div v-if="selectedAlliedStat['surfaceDice'][0]" class="h6 text-start">
                                                             First batch:
+                                                            <div class="dice">
                                                             <div v-for="(count, color) in selectedAlliedStat['surfaceDice'][0]" :key="color" class="color-count">
                                                                 <div :style="{ backgroundColor: color }" class="color-box"></div>
                                                                 {{ count }}
                                                             </div>
+                                                            </div>
                                                         </div>
                                                         <div v-if="selectedAlliedStat['surfaceDice'][1]" class="h6 text-start">
                                                             Second batch:
+                                                            <div class="dice">
                                                             <div v-for="(count, color) in selectedAlliedStat['surfaceDice'][1]" :key="color" class="color-count">
                                                                 <div :style="{ backgroundColor: color }" class="color-box"></div>
                                                                 {{ count }}
                                                             </div>
+                                                            </div>
                                                         </div>
                                                         <div v-if="selectedAlliedStat['surfaceDice'][2]" class="h6 text-start">
                                                             Third batch:
+                                                            <div class="dice">
                                                             <div v-for="(count, color) in selectedAlliedStat['surfaceDice'][2]" :key="color" class="color-count">
                                                                 <div :style="{ backgroundColor: color }" class="color-box"></div>
                                                                 {{ count }}
+                                                            </div>
                                                             </div>
                                                         </div>
                                                     </td>

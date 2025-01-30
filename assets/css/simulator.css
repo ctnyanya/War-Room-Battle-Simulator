@@ -156,10 +156,25 @@
     .input-group input {
         width: 30px !important;
     }
-
-    .country-list img {
-        height: 32px;
-        width: 48px;
+    .input-group button {
+        30px;
     }
 
+    .country-list img {
+        height: 24px;
+        width: 36px;
+    }
+    
+    .port-adv {
+        display: flex;
+    }
+    
+    .dice {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .custom-range {
+        width: 100%;
+    }
 }
