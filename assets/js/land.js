@@ -186,7 +186,7 @@ const landApp = createApp({
                             <h4 class="mb-0">Simulation Summary</h4>
                         </div>
                         <div class="card-body flex-grow-1">
-                            <div v-if="results">
+                            <div v-if="results && !isSimulating">
                                 <div class="row mb-4">
                                 <!-- Axis Results -->
                                 <div class="col-md-2">
@@ -486,7 +486,7 @@ Right-most: Best luck for the Allied">
                             </div>
                             
                             <!-- Causlties Distribution -->
-                            <div v-show="results" class="row mb-4">
+                            <div v-show="results && !isSimulating" class="row mb-4">
                                 <div class="text-center h5">Casualties Distribution</div>
                                 <canvas id="casualties-dist" width="400" height="200"></canvas>
                             </div>
@@ -888,12 +888,16 @@ Right-most: Best luck for the Allied">
             
             // default sample run set to median
             this.selectedRun = Math.floor(this.simulationRuns / 2);
-            // reset simulation
-            this.isSimulating = false;
-            this.currentRun = 0;
+
             
-            // plot graph
-            this.renderChart();
+            // reset simulation
+            setTimeout(() => {
+                // plot graph
+                this.renderChart(); 
+                this.isSimulating = false;
+                this.currentRun = 0;
+                        
+            }, 1000);
             
            
         },
