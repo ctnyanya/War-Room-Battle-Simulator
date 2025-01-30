@@ -114,6 +114,7 @@
 
 .progress {
   height: 20px; /* Height of the progress bar */
+  margin-top: 10px;
   margin-bottom: 10px;
 }
 
@@ -128,6 +129,20 @@
     width: 50%;
 }
 
+/* dice roll */
+
+.color-box {
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+    margin-right: 5px;
+    vertical-align: middle;
+    border: 1px solid #000;
+}
+.color-count {
+    display: inline-block;
+    margin-right: 20px;
+}
 
 
 /* Responsive css */

@@ -357,6 +357,110 @@ Right-most: Best luck for the Allied">
                                             <div class="label label-left">Axis Casualties: {{ selectedAxisStat['casualties'] }}</div>
                                             <div class="label label-right">{{ selectedAlliedStat['casualties'] }} :Allied Casualties</div>
                                         </div>
+                                        <div class="table-responsive">
+                                        <table class="table table-bordered align-middle">
+                                            <tbody>
+                                            <tr>
+                                                    <td colspan="5">
+                                                        <div v-if="selectedAxisStat['airDice'][0]" class="h6 text-start">
+                                                            First batch:
+                                                            <div v-for="(count, color) in selectedAxisStat['airDice'][0]" :key="color" class="color-count">
+                                                                <div :style="{ backgroundColor: color }" class="color-box"></div>
+                                                                {{ count }}
+                                                            </div>
+                                                        </div>
+                                                        <div v-if="selectedAxisStat['airDice'][1]" class="h6 text-start">
+                                                            Second batch:
+                                                            <div v-for="(count, color) in selectedAxisStat['airDice'][1]" :key="color" class="color-count">
+                                                                <div :style="{ backgroundColor: color }" class="color-box"></div>
+                                                                {{ count }}
+                                                            </div>
+                                                        </div>
+                                                        <div v-if="selectedAxisStat['airDice'][2]" class="h6 text-start">
+                                                            Third batch:
+                                                            <div v-for="(count, color) in selectedAxisStat['airDice'][2]" :key="color" class="color-count">
+                                                                <div :style="{ backgroundColor: color }" class="color-box"></div>
+                                                                {{ count }}
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td><p class="h6">Air Dice</p></td>
+                                                    <td colspan="5">
+                                                        <div v-if="selectedAlliedStat['airDice'][0]" class="h6 text-start">
+                                                            First batch:
+                                                            <div v-for="(count, color) in selectedAlliedStat['airDice'][0]" :key="color" class="color-count">
+                                                                <div :style="{ backgroundColor: color }" class="color-box"></div>
+                                                                {{ count }}
+                                                            </div>
+                                                        </div>
+                                                        <div v-if="selectedAlliedStat['airDice'][1]" class="h6 text-start">
+                                                            Second batch:
+                                                            <div v-for="(count, color) in selectedAlliedStat['airDice'][1]" :key="color" class="color-count">
+                                                                <div :style="{ backgroundColor: color }" class="color-box"></div>
+                                                                {{ count }}
+                                                            </div>
+                                                        </div>
+                                                        <div v-if="selectedAlliedStat['airDice'][2]" class="h6 text-start">
+                                                            Third batch:
+                                                            <div v-for="(count, color) in selectedAlliedStat['airDice'][2]" :key="color" class="color-count">
+                                                                <div :style="{ backgroundColor: color }" class="color-box"></div>
+                                                                {{ count }}
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="5">
+                                                        <div v-if="selectedAxisStat['surfaceDice'][0]" class="h6 text-start">
+                                                            First batch:
+                                                            <div v-for="(count, color) in selectedAxisStat['surfaceDice'][0]" :key="color" class="color-count">
+                                                                <div :style="{ backgroundColor: color }" class="color-box"></div>
+                                                                {{ count }}
+                                                            </div>
+                                                        </div>
+                                                        <div v-if="selectedAxisStat['surfaceDice'][1]" class="h6 text-start">
+                                                            Second batch:
+                                                            <div v-for="(count, color) in selectedAxisStat['surfaceDice'][1]" :key="color" class="color-count">
+                                                                <div :style="{ backgroundColor: color }" class="color-box"></div>
+                                                                {{ count }}
+                                                            </div>
+                                                        </div>
+                                                        <div v-if="selectedAxisStat['surfaceDice'][2]" class="h6 text-start">
+                                                            Third batch:
+                                                            <div v-for="(count, color) in selectedAxisStat['surfaceDice'][2]" :key="color" class="color-count">
+                                                                <div :style="{ backgroundColor: color }" class="color-box"></div>
+                                                                {{ count }}
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td><p class="h6">Surface Dice</p></td>
+                                                    <td colspan="5">
+                                                        <div v-if="selectedAlliedStat['surfaceDice'][0]" class="h6 text-start">
+                                                            First batch:
+                                                            <div v-for="(count, color) in selectedAlliedStat['surfaceDice'][0]" :key="color" class="color-count">
+                                                                <div :style="{ backgroundColor: color }" class="color-box"></div>
+                                                                {{ count }}
+                                                            </div>
+                                                        </div>
+                                                        <div v-if="selectedAlliedStat['surfaceDice'][1]" class="h6 text-start">
+                                                            Second batch:
+                                                            <div v-for="(count, color) in selectedAlliedStat['surfaceDice'][1]" :key="color" class="color-count">
+                                                                <div :style="{ backgroundColor: color }" class="color-box"></div>
+                                                                {{ count }}
+                                                            </div>
+                                                        </div>
+                                                        <div v-if="selectedAlliedStat['surfaceDice'][2]" class="h6 text-start">
+                                                            Third batch:
+                                                            <div v-for="(count, color) in selectedAlliedStat['surfaceDice'][2]" :key="color" class="color-count">
+                                                                <div :style="{ backgroundColor: color }" class="color-box"></div>
+                                                                {{ count }}
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        </div>
                                     </div>
                                 </div>
                                 
@@ -656,7 +760,10 @@ Right-most: Best luck for the Allied">
                 };
                 
                 // Air Battles
-                var result = this.battle('air', 'axis');
+                var output = this.battle('air', 'axis');
+                var result = output['defenders'];
+                axisStat['airDice'] = output['diceRolls'];
+                
                 alliedStat['damaged']['bomber'] = result['damaged']['bomber'];
                 alliedStat['damaged']['fighter'] = result['damaged']['fighter_air'] + result['damaged']['fighter_surface'];
                 delete result['damaged'];
@@ -666,7 +773,10 @@ Right-most: Best luck for the Allied">
                 }
                 this.alliedRemainSurfacePower = this.computeSurface(result);
 
-                result = this.battle('air', 'allied');
+                var output = this.battle('air', 'allied');
+                var result = output['defenders'];
+                alliedStat['airDice'] = output['diceRolls'];
+                
                 axisStat['damaged']['bomber'] = result['damaged']['bomber'];
                 axisStat['damaged']['fighter'] = result['damaged']['fighter_air'] + result['damaged']['fighter_surface'];
                 delete result['damaged'];
@@ -677,7 +787,10 @@ Right-most: Best luck for the Allied">
                 this.axisRemainSurfacePower = this.computeSurface(result);
                 
                 // Surface Battles
-                var result = this.battle('surface', 'axis');
+                var output = this.battle('surface', 'axis');
+                var result = output['defenders'];
+                axisStat['surfaceDice'] = output['diceRolls'];
+                
                 alliedStat['damaged']['battleship'] = result['damaged']['battleship_antiair'] + result['damaged']['battleship_offensive'];
                 alliedStat['damaged']['carrier'] = result['damaged']['carrier_antiair'] + result['damaged']['carrier_offensive'];
                 alliedStat['damaged']['cruiser'] = result['damaged']['cruiser_escort'] + result['damaged']['cruiser_offensive'];
@@ -690,7 +803,10 @@ Right-most: Best luck for the Allied">
                     alliedStat['survived']['submarine'] = result[country]['submarine'];
                 }
                 
-                var result = this.battle('surface', 'allied');
+                var output = this.battle('surface', 'allied');
+                var result = output['defenders'];
+                alliedStat['surfaceDice'] = output['diceRolls'];
+                
                 axisStat['damaged']['battleship'] = result['damaged']['battleship_antiair'] + result['damaged']['battleship_offensive'];
                 axisStat['damaged']['carrier'] = result['damaged']['carrier_antiair'] + result['damaged']['carrier_offensive'];
                 axisStat['damaged']['cruiser'] = result['damaged']['cruiser_escort'] + result['damaged']['cruiser_offensive'];
@@ -809,6 +925,7 @@ Right-most: Best luck for the Allied">
                 power = this.axisRemainSurfacePower;
             }
             var defenders = {};
+            var diceRolls = [];
             var damaged = {
                     bomber: 0,
                     fighter_air: 0,
@@ -836,6 +953,8 @@ Right-most: Best luck for the Allied">
                 power -= n;
                 
                 colors = this.diceRoll(n);
+                diceRolls.push(colors);
+                
                 if (type == 'air'){
                     // resolve green
                     var green = colors['green'];
@@ -1184,7 +1303,11 @@ Right-most: Best luck for the Allied">
             }
             // Count damaged units and return them to healthy
             defenders['damaged'] = damaged;
-            return defenders;   
+            
+            var output = {};
+            output['defenders'] = defenders;
+            output['diceRolls'] = diceRolls;
+            return output;   
         },
         diceRoll(n){
             // Define the sides of the die
@@ -1203,8 +1326,9 @@ Right-most: Best luck for the Allied">
                 blue: 0,
                 green: 0,
                 red: 0,
-                white: 0,
-                black: 0
+                black: 0,
+                white: 0
+
             };
 
             // Roll the dice n times
@@ -1246,7 +1370,7 @@ Right-most: Best luck for the Allied">
                         x: {
                             title: {
                                 display: true,
-                                text: 'Run number' 
+                                text: 'Run number (From Axis luckiest to Allied luckiest)' 
                             },
                             ticks: {
                                 autoSkip: true,
