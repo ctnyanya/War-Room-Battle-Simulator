@@ -795,14 +795,15 @@ Right-most: Best luck for the Allied">
                 alliedStat['damaged']['carrier'] = result['damaged']['carrier_antiair'] + result['damaged']['carrier_offensive'];
                 alliedStat['damaged']['cruiser'] = result['damaged']['cruiser_escort'] + result['damaged']['cruiser_offensive'];
                 alliedStat['survived']['submarine'] = result['damaged']['submarine']; // dived 
+                
                 delete result['damaged'];
                 for (const country in result){
                     alliedStat['survived']['battleship'] += result[country]['battleship_antiair'] + result[country]['battleship_offensive'];
                     alliedStat['survived']['carrier'] += result[country]['carrier_antiair'] + result[country]['carrier_offensive'];
                     alliedStat['survived']['cruiser'] += result[country]['cruiser_escort'] + result[country]['cruiser_offensive'];
-                    alliedStat['survived']['submarine'] = result[country]['submarine'];
+                    alliedStat['survived']['submarine'] += result[country]['submarine'];
                 }
-                
+
                 var output = this.battle('surface', 'allied');
                 var result = output['defenders'];
                 alliedStat['surfaceDice'] = output['diceRolls'];
@@ -816,7 +817,7 @@ Right-most: Best luck for the Allied">
                     axisStat['survived']['battleship'] += result[country]['battleship_antiair'] + result[country]['battleship_offensive'];
                     axisStat['survived']['carrier'] += result[country]['carrier_antiair'] + result[country]['carrier_offensive'];
                     axisStat['survived']['cruiser'] += result[country]['cruiser_escort'] + result[country]['cruiser_offensive'];
-                    axisStat['survived']['submarine'] = result[country]['submarine'];
+                    axisStat['survived']['submarine'] += result[country]['submarine'];
                 }
                 
                 // Count destroyed units and casualties
