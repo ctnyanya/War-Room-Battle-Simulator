@@ -201,7 +201,7 @@ const navalApp = createApp({
                             <div v-if="results && !isSimulating">
                                 <div class="row mb-4">
                                 <!-- Axis Results -->
-                                <div class="col-md-2">
+                                <div class="col-md-2 all-elim">
                                     <div class="text-center">
                                         <h5 class="text-danger">Eliminate all air</h5>
                                         <div class="display-4-small">{{ results.axisElimAllAir }}%</div>
@@ -211,7 +211,7 @@ const navalApp = createApp({
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-2 all-elim">
                                     <div class="text-center">
                                         <h5 class="text-danger">Eliminate all surface</h5>
                                         <div class="display-4-small">{{ results.axisElimAllSurface }}%</div>
@@ -222,7 +222,7 @@ const navalApp = createApp({
                                     </div>
                                 </div>
                                 <!-- Allied Results -->
-                                <div class="col-md-2">
+                                <div class="col-md-2 all-elim">
                                     <div class="text-center">
                                         <h5 class="text-primary">Eliminate all air</h5>
                                         <div class="display-4-small">{{ results.alliedElimAllAir }}%</div>
@@ -232,7 +232,7 @@ const navalApp = createApp({
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-2 all-elim">
                                     <div class="text-center">
                                         <h5 class="text-primary">Eliminate all surface</h5>
                                         <div class="display-4-small">{{ results.alliedElimAllSurface }}%</div>
